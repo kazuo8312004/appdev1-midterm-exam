@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+<!--
+
+Tooplate 2140 Stellaris Research
+
+https://www.tooplate.com/view/2140-stellaris-research
+
+Free HTML CSS Template
+
+-->
+  <link rel="stylesheet" crossorigin href="/appdev1-midterm-exam/assets/index-B7VSvo9z.css">
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo-container">
+                <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cosmic logo with planet and orbit -->
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="#8b5cf6" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="50" cy="50" r="20" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="12" fill="#7c3aed"/>
+                    
+                    <!-- Orbiting elements -->
+                    <circle cx="85" cy="50" r="4" fill="#f59e0b">
+                        <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="8s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="15" cy="50" r="3" fill="#ec4899">
+                        <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="-360 50 50" dur="12s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Central glow -->
+                    <circle cx="50" cy="50" r="8" fill="#f59e0b" opacity="0.3"/>
+                </svg>
+                <span class="logo-text">STELLARIS</span>
+            </a>
+            
+            <div class="mobile-menu-toggle" id="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul>
+                    <li><a href="#home">HOME</a></li>
+                    <li><a href="#about">ABOUT</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+    <!-- Star layers -->
+    <div class="stars-layer"></div>
+    
+    <!-- Floating space orbs -->
+    <div class="space-orb"></div>
+    <div class="space-orb"></div>
+    <div class="space-orb"></div>
+    <div class="space-orb"></div>
+    
+    <!-- Shooting stars -->
+    <div class="shooting-star" style="--delay: 0s; --top: 10%; --left: 10%;"></div>
+    <div class="shooting-star" style="--delay: 1.5s; --top: 30%; --left: 60%;"></div>
+    <div class="shooting-star" style="--delay: 3s; --top: 20%; --left: 80%;"></div>
+    <div class="shooting-star" style="--delay: 4.5s; --top: 60%; --left: 30%;"></div>
+    <div class="shooting-star" style="--delay: 6s; --top: 80%; --left: 70%;"></div>
+    
+        <div class="hero-content">
+            <h1 class="cosmic-title">Kirk Percival B. <br>Del Pilar</h1>
+            <p class="subtitle">BSIS 3-A</p>
+        </div>
+        <a href="#about" class="scroll-btn">
+            <div class="scroll-btn-inner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </a>
+    </section>
+
+    <section id="about" class="fade-in">
+        <h2 class="section-title">Short Info About me</h2>
+        <div class="about-section">
+            <div class="about-hero">
+                <h3>From Developer to SQA</h3>
+                <p class="about-description">
+                    I want to develope But its hard to be a developer so I choose to be a Software Quality Assurance.
+                </p>
+            </div>
+            
+            <div class="about-grid">
+                <div class="about-card">
+                    <span class="about-card-icon">🔬</span>
+                    <h4>Experience</h4>
+                    <p>Still Learning.</p>
+                </div>
+                
+                <div class="about-card">
+                    <span class="about-card-icon">🛰️</span>
+                    <h4>Mission</h4>
+                    <p>To make sure that sofware that will be deployed it quality and usefull to people.</p>
+                </div>
+                
+                <div class="about-card">
+                    <span class="about-card-icon">🌌</span>
+                    <h4>Discovery about self</h4>
+                    <p>Lazy.</p>
+                </div>
+            </div>
+            
+            <div class="achievements-grid">
+                <div class="achievement-item">
+                    <div class="achievement-number">1</div>
+                    <div class="achievement-label">ACT Graduate</div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-number">25</div>
+                    <div class="achievement-label">Hours Per Week Availability</div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-number">none</div>
+                    <div class="achievement-label">Awards Received</div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-number">2</div>
+                    <div class="achievement-label">Active Projects</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="fade-in">
+        <h2 class="section-title">Propose Project For Me</h2>
+        <form class="contact-form">
+            <div class="form-group">
+                <input type="text" placeholder="Project Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <textarea rows="5" placeholder="Link For Proposal" required></textarea>
+            </div>
+            <button type="submit" class="launch-btn">SUBMIT PROPOSAL</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; Kirk Percival B. Del Pilar Template</p>
+        </div>
+    </footer>
+<script src="tooplate-stellaris-script.js"></script>
+</body>
+</html>
