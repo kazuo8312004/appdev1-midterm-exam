@@ -1,435 +1,746 @@
-import { useState, useEffect, useRef } from 'react'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('exploration');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const canvasRef = useRef(null);
+  const [toggleModal, setToggleModal] = useState(false);
 
-  useEffect(() => {
-    // Starfield animation
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const stars = [];
-    const numStars = 200;
-
-    for (let i = 0; i < numStars; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 1.5,
-        opacity: Math.random(),
-        speed: Math.random() * 0.5
-      });
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      stars.forEach(star => {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-        ctx.fill();
-        
-        star.opacity += star.speed * 0.01;
-        if (star.opacity > 1 || star.opacity < 0) {
-          star.speed = -star.speed;
-        }
-      });
-      
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    alert('Proposal submitted! We will contact you soon.');
-  };
-
-  const missionContent = {
-    exploration: [
-      {
-        title: "Kepler-442b Investigation",
-        description: "Comprehensive atmospheric analysis of this super-Earth located 1,206 light-years away. Studying potential biosignatures and atmospheric composition using advanced spectroscopy techniques.",
-        status: "Active"
-      },
-      {
-        title: "Proxima Centauri Survey",
-        description: "Long-term monitoring mission of our nearest stellar neighbor, focusing on Proxima b's habitability potential and atmospheric dynamics during stellar flare events.",
-        status: "Ongoing"
-      },
-      {
-        title: "Europa Deep Dive",
-        description: "Robotic exploration beneath Europa's ice sheet, searching for microbial life in the subsurface ocean and analyzing water samples from geysers.",
-        status: "Planning"
-      }
-    ],
-    research: [
-      {
-        title: "Atmospheric Modeling",
-        description: "Developing advanced computer models to predict exoplanet atmospheric conditions and identify optimal candidates for follow-up observations with next-generation telescopes.",
-        status: "Active"
-      },
-      {
-        title: "Biosignature Database",
-        description: "Creating comprehensive catalog of potential biological markers that could indicate life on distant worlds, including both Earth-like and exotic biochemistries.",
-        status: "Research"
-      },
-      {
-        title: "Interstellar Communication",
-        description: "Designing protocols for potential communication with extraterrestrial intelligence, including mathematical languages and universal concepts.",
-        status: "Development"
-      }
-    ],
-    discovery: [
-      {
-        title: "TOI-715b Confirmation",
-        description: "Recently confirmed this Earth-sized exoplanet in the habitable zone of a nearby red dwarf star, making it a prime candidate for atmospheric studies.",
-        status: "Confirmed"
-      },
-      {
-        title: "Water Vapor Detection",
-        description: "First detection of water vapor in the atmosphere of K2-18b, a sub-Neptune exoplanet in its star's habitable zone, using Hubble Space Telescope data.",
-        status: "Published"
-      },
-      {
-        title: "Multi-Planet System",
-        description: "Discovery of a seven-planet system around TRAPPIST-1, with three planets potentially habitable and showing signs of atmospheric retention.",
-        status: "Complete"
-      }
-    ],
-    future: [
-      {
-        title: "James Webb Follow-up",
-        description: "Planned observations using JWST to study atmospheric composition of newly discovered potentially habitable exoplanets, focusing on oxygen and methane detection.",
-        status: "Scheduled"
-      },
-      {
-        title: "Breakthrough Starshot",
-        description: "Collaboration on developing ultra-light nanocrafts capable of reaching Alpha Centauri within 20 years to capture close-up images of Proxima b.",
-        status: "Planning"
-      },
-      {
-        title: "Mars Sample Return",
-        description: "Leading the astrobiology analysis team for the Mars Sample Return mission, searching for ancient microbial life in carefully selected rock samples.",
-        status: "Approved"
-      }
-    ]
-  };
+  function handleToggleModal() {
+    setToggleModal(!toggleModal);
+  }
 
   return (
     <>
-      <canvas ref={canvasRef} id="starfield"></canvas>
+    <div>
 
-      <nav id="navbar">
-        <div className="nav-container">
-          <a href="#home" className="logo-container">
-            <svg className="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="50" cy="50" r="35" fill="none" stroke="#8b5cf6" strokeWidth="1.5" opacity="0.6"/>
-              <circle cx="50" cy="50" r="20" fill="none" stroke="#f59e0b" strokeWidth="2"/>
-              <circle cx="50" cy="50" r="12" fill="#7c3aed"/>
-              <circle cx="85" cy="50" r="4" fill="#f59e0b">
-                <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="8s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="15" cy="50" r="3" fill="#ec4899">
-                <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="-360 50 50" dur="12s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="50" cy="50" r="8" fill="#f59e0b" opacity="0.3"/>
-            </svg>
-            <span className="logo-text">STELLARIS</span>
-          </a>
-          
-          <div 
-            className="mobile-menu-toggle" 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
+   {/* Preloader (commented out) */}
+      {/*
+      <div id="js-preloader" className="js-preloader">
+        <div className="preloader-inner">
+          <span className="dot" />
+          <div className="dots">
+            <span />
+            <span />
+            <span />
           </div>
-          
-          <div className={`nav-menu ${mobileMenuOpen ? 'active' : ''}`}>
+        </div>
+      </div>
+      */}
+
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+
+            <a href="index.html" class="logo">
+              <img src="assets/images/logo.png" alt="Chain App Dev" />
+            </a>
+        
+            <ul class="nav">
+              <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
+              <li class="scroll-to-section"><a href="#services">Services</a></li>
+              <li class="scroll-to-section"><a href="#about">About</a></li>
+              <li class="scroll-to-section"><a href="#pricing">Pricing</a></li>
+              <li class="scroll-to-section"><a href="#newsletter">Newsletter</a></li>
+              <li><div class="gradient-button"><a id="modal_trigger" href="#modal"><i class="fa fa-sign-in-alt"></i> Sign In Now</a></div></li> 
+            </ul>        
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div id="modal" class="popupContainer" style="display:none;">
+    <div class="popupHeader">
+        <span class="header_title">Login</span>
+        <span class="modal_close"><i class="fa fa-times"></i></span>
+    </div>
+
+    <section class="popupBody">
+
+        <div class="social_login">
+            <div class="">
+                <a href="#" class="social_box fb">
+                    <span class="icon"><i class="fab fa-facebook"></i></span>
+                    <span class="icon_title">Connect with Facebook</span>
+
+                </a>
+
+                <a href="#" class="social_box google">
+                    <span class="icon"><i class="fab fa-google-plus"></i></span>
+                    <span class="icon_title">Connect with Google</span>
+                </a>
+            </div>
+
+            <div class="centeredText">
+                <span>Or use your Email address</span>
+            </div>
+
+            <div class="action_btns">
+                <div class="one_half"><a href="#" id="login_form" class="btn">Login</a></div>
+                <div class="one_half last"><a href="#" id="register_form" class="btn">Sign up</a></div>
+            </div>
+        </div>
+
+        <div class="user_login">
+            <form>
+                <label>Email / Username</label>
+                <input type="text" />
+                <br />
+
+                <label>Password</label>
+                <input type="password" />
+                <br />
+
+                <div class="checkbox">
+                    <input id="remember" type="checkbox" />
+                    <label for="remember">Remember me on this computer</label>
+                </div>
+
+                <div class="action_btns">
+                    <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
+                    <div class="one_half last"><a href="#" class="btn btn_red">Login</a></div>
+                </div>
+            </form>
+
+            <a href="#" class="forgot_password">Forgot password?</a>
+        </div>
+
+        <div class="user_register">
+            <form>
+                <label>Full Name</label>
+                <input type="text" />
+                <br />
+
+                <label>Email Address</label>
+                <input type="email" />
+                <br />
+
+                <label>Password</label>
+                <input type="password" />
+                <br />
+
+                <div class="checkbox">
+                    <input id="send_updates" type="checkbox" />
+                    <label for="send_updates">Send me occasional email updates</label>
+                </div>
+
+                <div class="action_btns">
+                    <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
+                    <div class="one_half last"><a href="#" class="btn btn_red">Register</a></div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+  <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-6 align-self-center">
+              <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <h2>Get The Latest App From App Stores</h2>
+                    <p>Chain App Dev is an app landing page HTML5 template based on Bootstrap v5.1.3 CSS layout provided by TemplateMo, a great website to download free CSS templates.</p>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="white-button first-button scroll-to-section">
+                      <a href="#contact">Free Quote <i class="fab fa-apple"></i></a>
+                    </div>
+                    <div class="white-button scroll-to-section">
+                      <a href="#contact">Free Quote <i class="fab fa-google-play"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                <img src="assets/images/slider-dec.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="services" class="services section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+            <h4>Amazing <em>Services &amp; Features</em> for you</h4>
+            <img src="assets/images/heading-line-dec.png" alt="" />
+            <p>If you need the greatest collection of HTML templates for your business, please visit <a rel="nofollow" href="https://www.toocss.com/" target="_blank">TooCSS</a> Blog. If you need to have a contact form PHP script, go to <a href="https://templatemo.com/contact" target="_parent">our contact page</a> for more information.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="service-item first-service">
+            <div class="icon"></div>
+            <h4>App Maintenance</h4>
+            <p>You are not allowed to redistribute this template ZIP file on any other website.</p>
+            <div class="text-button">
+              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="service-item second-service">
+            <div class="icon"></div>
+            <h4>Rocket Speed of App</h4>
+            <p>You are allowed to use the Chain App Dev HTML template. Feel free to modify or edit this layout.</p>
+            <div class="text-button">
+              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="service-item third-service">
+            <div class="icon"></div>
+            <h4>Multi Workflow Idea</h4>
+            <p>If this template is beneficial for your work, please support us <a rel="nofollow" href="https://paypal.me/templatemo" target="_blank">a little via PayPal</a>. Thank you.</p>
+            <div class="text-button">
+              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="service-item fourth-service">
+            <div class="icon"></div>
+            <h4>24/7 Help &amp; Support</h4>
+            <p>Lorem ipsum dolor consectetur adipiscing elit sedder williamsburg photo booth quinoa and fashion axe.</p>
+            <div class="text-button">
+              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="about" class="about-us section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 align-self-center">
+          <div class="section-heading">
+            <h4>About <em>What We Do</em> &amp; Who We Are</h4>
+            <img src="assets/images/heading-line-dec.png" alt="" />
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eismod tempor incididunt ut labore et dolore magna.</p>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="box-item">
+                <h4><a href="#">Maintance Problems</a></h4>
+                <p>Lorem Ipsum Text</p>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="box-item">
+                <h4><a href="#">24/7 Support &amp; Help</a></h4>
+                <p>Lorem Ipsum Text</p>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="box-item">
+                <h4><a href="#">Fixing Issues About</a></h4>
+                <p>Lorem Ipsum Text</p>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="box-item">
+                <h4><a href="#">Co. Development</a></h4>
+                <p>Lorem Ipsum Text</p>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eismod tempor idunte ut labore et dolore adipiscing  magna.</p>
+              <div class="gradient-button">
+                <a href="#">Start 14-Day Free Trial</a>
+              </div>
+              <span>*No Credit Card Required</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="right-image">
+            <img src="assets/images/about-right-dec.png" alt=""/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="clients" class="the-clients">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading">
+            <h4>Check What <em>The Clients Say</em> About Our App Dev</h4>
+            <img src="assets/images/heading-line-dec.png" alt=""/>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eismod tempor incididunt ut labore et dolore magna.</p>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="naccs">
+            <div class="grid">
+              <div class="row">
+                <div class="col-lg-7 align-self-center">
+                  <div class="menu">
+                    <div class="first-thumb active">
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>David Martino Co</h4>
+                            <span class="date">30 November 2021</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Financial Apps</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <span class="rating">4.8</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>Jake Harris Nyo</h4>
+                            <span class="date">29 November 2021</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Digital Business</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <span class="rating">4.5</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>May Catherina</h4>
+                            <span class="date">27 November 2021</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Business &amp; Economics</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <span class="rating">4.7</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>Random User</h4>
+                            <span class="date">24 November 2021</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">New App Ecosystem</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <span class="rating">3.9</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="last-thumb">
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>Mark Amber Do</h4>
+                            <span class="date">21 November 2021</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Web Development</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <span class="rating">4.3</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+                <div class="col-lg-5">
+                  <ul class="nacc">
+                    <li class="active">
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt=""/>
+                                <p>“Lorem ipsum dolor sit amet, consectetur adpiscing elit, sed do eismod tempor idunte ut labore et dolore magna aliqua darwin kengan
+                                  lorem ipsum dolor sit amet, consectetur picing elit massive big blasta.”</p>
+                              </div>
+                              <div class="down-content">
+                                <img src="assets/images/client-image.jpg" alt=""/>
+                                <div class="right-content">
+                                  <h4>David Martino</h4>
+                                  <span>CEO of David Company</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt=""/>
+                                <p>“CTO, Lorem ipsum dolor sit amet, consectetur adpiscing elit, sed do eismod tempor idunte ut labore et dolore magna aliqua darwin kengan
+                                  lorem ipsum dolor sit amet, consectetur picing elit massive big blasta.”</p>
+                              </div>
+                              <div class="down-content">
+                                <img src="assets/images/client-image.jpg" alt=""/>
+                                <div class="right-content">
+                                  <h4>Jake H. Nyo</h4>
+                                  <span>CTO of Digital Company</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt=""/>
+                                <p>“May, Lorem ipsum dolor sit amet, consectetur adpiscing elit, sed do eismod tempor idunte ut labore et dolore magna aliqua darwin kengan
+                                  lorem ipsum dolor sit amet, consectetur picing elit massive big blasta.”</p>
+                              </div>
+                              <div class="down-content">
+                                <img src="assets/images/client-image.jpg" alt=""/>
+                                <div class="right-content">
+                                  <h4>May C.</h4>
+                                  <span>Founder of Catherina Co.</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt=""/>
+                                <p>“Lorem ipsum dolor sit amet, consectetur adpiscing elit, sed do eismod tempor idunte ut labore et dolore magna aliqua darwin kengan
+                                  lorem ipsum dolor sit amet, consectetur picing elit massive big blasta.”</p>
+                              </div>
+                              <div class="down-content">
+                                <img src="assets/images/client-image.jpg" alt=""/>
+                                <div class="right-content">
+                                  <h4>Random Staff</h4>
+                                  <span>Manager, Digital Company</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt=""/>
+                                <p>“Mark, Lorem ipsum dolor sit amet, consectetur adpiscing elit, sed do eismod tempor idunte ut labore et dolore magna aliqua darwin kengan
+                                  lorem ipsum dolor sit amet, consectetur picing elit massive big blasta.”</p>
+                              </div>
+                              <div class="down-content">
+                                <img src="assets/images/client-image.jpg" alt=""/>
+                                <div class="right-content">
+                                  <h4>Mark Am</h4>
+                                  <span>CTO, Amber Do Company</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>          
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="pricing" class="pricing-tables">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading">
+            <h4>We Have The Best Pre-Order <em>Prices</em> You Can Get</h4>
+            <img src="assets/images/heading-line-dec.png" alt=""/>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eismod tempor incididunt ut labore et dolore magna.</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="pricing-item-regular">
+            <span class="price">$12</span>
+            <h4>Standard Plan App</h4>
+            <div class="icon">
+              <img src="assets/images/pricing-table-01.png" alt=""/>
+            </div>
             <ul>
-              <li><a href="#home" onClick={() => setMobileMenuOpen(false)}>HOME</a></li>
-              <li><a href="#about" onClick={() => setMobileMenuOpen(false)}>ABOUT</a></li>
-              <li><a href="#missions" onClick={() => setMobileMenuOpen(false)}>MISSIONS</a></li>
-              <li><a href="#equipment" onClick={() => setMobileMenuOpen(false)}>EQUIPMENT</a></li>
-              <li><a href="#contact" onClick={() => setMobileMenuOpen(false)}>CONTACT</a></li>
+              <li>Lorem Ipsum Dolores</li>
+              <li>20 TB of Storage</li>
+              <li class="non-function">Life-time Support</li>
+              <li class="non-function">Premium Add-Ons</li>
+              <li class="non-function">Fastest Network</li>
+              <li class="non-function">More Options</li>
+            </ul>
+            <div class="border-button">
+              <a href="#">Purchase This Plan Now</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="pricing-item-pro">
+            <span class="price">$25</span>
+            <h4>Business Plan App</h4>
+            <div class="icon">
+              <img src="assets/images/pricing-table-01.png" alt=""/>
+            </div>
+            <ul>
+              <li>Lorem Ipsum Dolores</li>
+              <li>50 TB of Storage</li>
+              <li>Life-time Support</li>
+              <li>Premium Add-Ons</li>
+              <li class="non-function">Fastest Network</li>
+              <li class="non-function">More Options</li>
+            </ul>
+            <div class="border-button">
+              <a href="#">Purchase This Plan Now</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="pricing-item-regular">
+            <span class="price">$66</span>
+            <h4>Premium Plan App</h4>
+            <div class="icon">
+              <img src="assets/images/pricing-table-01.png" alt=""/>
+            </div>
+            <ul>
+              <li>Lorem Ipsum Dolores</li>
+              <li>120 TB of Storage</li>
+              <li>Life-time Support</li>
+              <li>Premium Add-Ons</li>
+              <li>Fastest Network</li>
+              <li>More Options</li>
+            </ul>
+            <div class="border-button">
+              <a href="#">Purchase This Plan Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+  <footer id="newsletter">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading">
+            <h4>Join our mailing list to receive the news &amp; latest trends</h4>
+          </div>
+        </div>
+        <div class="col-lg-6 offset-lg-3">
+          <form id="search" action="#" method="GET">
+            <div class="row">
+              <div class="col-lg-6 col-sm-6">
+                <fieldset>
+                  <input type="address" name="address" class="email" placeholder="Email Address..." autocomplete="on" required/>
+                </fieldset>
+              </div>
+              <div class="col-lg-6 col-sm-6">
+                <fieldset>
+                  <button type="submit" class="main-button">Subscribe Now <i class="fa fa-angle-right"></i></button>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="footer-widget">
+            <h4>Contact Us</h4>
+            <p>Rio de Janeiro - RJ, 22795-008, Brazil</p>
+            <p><a href="#">010-020-0340</a></p>
+            <p><a href="#">info@company.co</a></p>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="footer-widget">
+            <h4>About Us</h4>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Services</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Testimonials</a></li>
+              <li><a href="#">Pricing</a></li>
+            </ul>
+            <ul>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Testimonials</a></li>
+              <li><a href="#">Pricing</a></li>
             </ul>
           </div>
         </div>
-      </nav>
-
-      <section id="home" className="hero">
-        <div className="stars-layer"></div>
-        <div className="space-orb"></div>
-        <div className="space-orb"></div>
-        <div className="space-orb"></div>
-        <div className="space-orb"></div>
-        
-        <div className="shooting-star" style={{'--delay': '0s', '--top': '10%', '--left': '10%'}}></div>
-        <div className="shooting-star" style={{'--delay': '1.5s', '--top': '30%', '--left': '60%'}}></div>
-        <div className="shooting-star" style={{'--delay': '3s', '--top': '20%', '--left': '80%'}}></div>
-        <div className="shooting-star" style={{'--delay': '4.5s', '--top': '60%', '--left': '30%'}}></div>
-        <div className="shooting-star" style={{'--delay': '6s', '--top': '80%', '--left': '70%'}}></div>
-        
-        <div className="hero-content">
-          <h1 className="cosmic-title">DR. ALEX NOVA</h1>
-          <p className="subtitle">Exoplanet Researcher & Deep Space Pioneer</p>
-        </div>
-        <a href="#about" className="scroll-btn">
-          <div className="scroll-btn-inner">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
-            </svg>
-          </div>
-        </a>
-      </section>
-
-      <section id="about">
-        <h2 className="section-title">EXPLORER PROFILE</h2>
-        <div className="about-section">
-          <div className="about-hero">
-            <h3>Pioneering the Frontiers of Space</h3>
-            <p className="about-description">
-              Leading humanity's quest to understand our place in the cosmos through cutting-edge research in exoplanet discovery, 
-              astrobiology, and interstellar exploration. With over 15 years of experience in space science, I've dedicated my career 
-              to unlocking the mysteries of distant worlds and searching for signs of life beyond Earth.
-            </p>
-          </div>
-          
-          <div className="about-grid">
-            <div className="about-card">
-              <span className="about-card-icon">🔬</span>
-              <h4>Research Excellence</h4>
-              <p>Published over 120 peer-reviewed papers on exoplanet atmospheres, habitability zones, and biosignature detection methods.</p>
-            </div>
-            
-            <div className="about-card">
-              <span className="about-card-icon">🛰️</span>
-              <h4>Mission Leadership</h4>
-              <p>Principal investigator on multiple NASA and ESA missions, including the TRAPPIST system exploration and Mars sample analysis.</p>
-            </div>
-            
-            <div className="about-card">
-              <span className="about-card-icon">🌌</span>
-              <h4>Discovery Pioneer</h4>
-              <p>Co-discoverer of 47 confirmed exoplanets, including three potentially habitable super-Earths in the Goldilocks zone.</p>
-            </div>
-          </div>
-          
-          <div className="achievements-grid">
-            <div className="achievement-item">
-              <div className="achievement-number">47</div>
-              <div className="achievement-label">Exoplanets Discovered</div>
-            </div>
-            <div className="achievement-item">
-              <div className="achievement-number">1,247</div>
-              <div className="achievement-label">Research Hours</div>
-            </div>
-            <div className="achievement-item">
-              <div className="achievement-number">23</div>
-              <div className="achievement-label">Awards Received</div>
-            </div>
-            <div className="achievement-item">
-              <div className="achievement-number">8</div>
-              <div className="achievement-label">Active Missions</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="missions" className="missions-section">
-        <div className="missions-container">
-          <h2 className="section-title">MISSION OPERATIONS</h2>
-          
-          <div className="mission-tabs">
-            <button 
-              className={`mission-tab ${activeTab === 'exploration' ? 'active' : ''}`}
-              onClick={() => setActiveTab('exploration')}
-            >
-              Deep Space Exploration
-            </button>
-            <button 
-              className={`mission-tab ${activeTab === 'research' ? 'active' : ''}`}
-              onClick={() => setActiveTab('research')}
-            >
-              Research Projects
-            </button>
-            <button 
-              className={`mission-tab ${activeTab === 'discovery' ? 'active' : ''}`}
-              onClick={() => setActiveTab('discovery')}
-            >
-              Recent Discoveries
-            </button>
-            <button 
-              className={`mission-tab ${activeTab === 'future' ? 'active' : ''}`}
-              onClick={() => setActiveTab('future')}
-            >
-              Future Missions
-            </button>
-          </div>
-          
-          <div className={`mission-content ${activeTab === 'exploration' ? 'active' : ''}`}>
-            <div className="mission-grid">
-              {missionContent.exploration.map((mission, index) => (
-                <div key={index} className="mission-card">
-                  <h4>{mission.title}</h4>
-                  <p>{mission.description}</p>
-                  <span className="mission-status">{mission.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className={`mission-content ${activeTab === 'research' ? 'active' : ''}`}>
-            <div className="mission-grid">
-              {missionContent.research.map((mission, index) => (
-                <div key={index} className="mission-card">
-                  <h4>{mission.title}</h4>
-                  <p>{mission.description}</p>
-                  <span className="mission-status">{mission.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className={`mission-content ${activeTab === 'discovery' ? 'active' : ''}`}>
-            <div className="mission-grid">
-              {missionContent.discovery.map((mission, index) => (
-                <div key={index} className="mission-card">
-                  <h4>{mission.title}</h4>
-                  <p>{mission.description}</p>
-                  <span className="mission-status">{mission.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className={`mission-content ${activeTab === 'future' ? 'active' : ''}`}>
-            <div className="mission-grid">
-              {missionContent.future.map((mission, index) => (
-                <div key={index} className="mission-card">
-                  <h4>{mission.title}</h4>
-                  <p>{mission.description}</p>
-                  <span className="mission-status">{mission.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="equipment">
-        <h2 className="section-title">RESEARCH INSTRUMENTS</h2>
-        <div className="equipment-container">
-          <div className="equipment-item">
-            <span>Hubble Telescope</span>
-          </div>
-          <div className="equipment-item">
-            <span>James Webb</span>
-          </div>
-          <div className="equipment-item">
-            <span>Spectroscopy Lab</span>
-          </div>
-          <div className="equipment-item">
-            <span>Radio Array</span>
-          </div>
-          <div className="equipment-item">
-            <span>AI Analysis</span>
-          </div>
-          <div className="equipment-item">
-            <span>Quantum Computing</span>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact">
-        <h2 className="section-title">RESEARCH COLLABORATION</h2>
-        <form className="contact-form" onSubmit={handleFormSubmit}>
-          <div className="form-group">
-            <input type="text" placeholder="Principal Investigator Name" required />
-          </div>
-          <div className="form-group">
-            <input type="email" placeholder="Institution Email" required />
-          </div>
-          <div className="form-group">
-            <textarea rows="5" placeholder="Research Proposal or Collaboration Inquiry" required></textarea>
-          </div>
-          <button type="submit" className="launch-btn">SUBMIT PROPOSAL</button>
-        </form>
-      </section>
-
-      <footer>
-        <div className="footer-content">
-          <div className="footer-section">
-            <h3>Research Areas</h3>
+        <div class="col-lg-3">
+          <div class="footer-widget">
+            <h4>Useful Links</h4>
             <ul>
-              <li><a href="#">Exoplanet Discovery</a></li>
-              <li><a href="#">Astrobiology</a></li>
-              <li><a href="#">Atmospheric Analysis</a></li>
-              <li><a href="#">SETI Research</a></li>
-              <li><a href="#">Space Technology</a></li>
+              <li><a href="#">Free Apps</a></li>
+              <li><a href="#">App Engine</a></li>
+              <li><a href="#">Programming</a></li>
+              <li><a href="#">Development</a></li>
+              <li><a href="#">App News</a></li>
+            </ul>
+            <ul>
+              <li><a href="#">App Dev Team</a></li>
+              <li><a href="#">Digital Web</a></li>
+              <li><a href="#">Normal Apps</a></li>
             </ul>
           </div>
-          
-          <div className="footer-section">
-            <h3>Publications</h3>
-            <ul>
-              <li><a href="#">Nature Astronomy</a></li>
-              <li><a href="#">Astrophysical Journal</a></li>
-              <li><a href="#">Science Magazine</a></li>
-              <li><a href="#">Research Papers</a></li>
-            </ul>
-          </div>
-          
-          <div className="footer-section">
-            <h3>Professional Network</h3>
-            <p style={{color: '#94a3b8', marginBottom: '15px'}}>
-              Connect with the global space research community
-            </p>
-            <div className="social-links">
-              <a href="#" aria-label="ResearchGate">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2L3.09 8.26l1.82 1.28L12 4.8l7.09 4.74 1.82-1.28L12 2M12 7L2 12l10 5 10-5-10-5"/>
-                </svg>
-              </a>
-              <a href="#" aria-label="NASA Collaboration">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82"/>
-                </svg>
-              </a>
-              <a href="#" aria-label="Academic Network">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 2a8 8 0 0 1 8 8 8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6 6 6 0 0 0 6 6 6 6 0 0 0 6-6 6 6 0 0 0-6-6"/>
-                </svg>
-              </a>
+        </div>
+        <div class="col-lg-3">
+          <div class="footer-widget">
+            <h4>About Our Company</h4>
+            <div class="logo">
+              <img src="assets/images/white-logo.png" alt=""/>
             </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
           </div>
         </div>
-        
-        <div className="footer-bottom">
-          <p>&copy; 2048 Dr. Alex Nova - Exoplanet Research Portfolio. Searching for life among the stars. Design: <a href="https://www.tooplate.com" target="_blank" rel="noopener noreferrer">Tooplate</a></p>
+        <div class="col-lg-12">
+          <div class="copyright-text">
+            <p>Copyright © 2022 Chain App Dev Company. All Rights Reserved. 
+          <br/>Design: <a href="https://templatemo.com/" target="_blank" title="css templates">TemplateMo</a></p>
+          </div>
         </div>
-      </footer>
+      </div>
+    </div>
+  </footer>
+
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/animation.js"></script>
+  <script src="assets/js/imagesloaded.js"></script>
+  <script src="assets/js/popup.js"></script>
+  <script src="assets/js/custom.js"></script>
+</div>
+      {/* Modal Trigger */}
+      <a id="modal_trigger" href="#modal" onClick={handleToggleModal}>
+        Open Modal
+      </a>
+
+      {/* Modal Popup */}
+      <div
+        id="modal"
+        className="popupContainer"
+        style={
+          toggleModal
+            ? {
+                display: 'block',
+                position: 'fixed',
+                opacity: 1,
+                zIndex: 11000,
+                left: '50%',
+                marginLeft: '-165px',
+                top: 100,
+              }
+            : { display: 'none' }
+        }
+      >
+        <div className="modalContent">
+          <h2>Modal Title</h2>
+          <p>This is a modal popup.</p>
+          <span className="modal_close" onClick={handleToggleModal}>
+            Close
+          </span>
+        </div>
+      </div>
+
+      {/* Lean Overlay */}
+      <div
+        id="lean_overlay"
+        style={
+          toggleModal
+            ? { display: 'block', opacity: '0.6' }
+            : { display: 'none' }
+        }
+      />
+
+     
     </>
-  )
+  );
 }
 
-export default App
+export default App;
